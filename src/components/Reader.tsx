@@ -496,9 +496,42 @@ export default function Reader({
                 }`}>
                   {currentChapter.title}
                 </h2>
-                <p className="text-xs text-slate-400 dark:text-slate-500">
+                <p className="text-xs text-slate-400 dark:text-slate-500 mb-4">
                   Obra por <span className="font-semibold">{book.author}</span>
                 </p>
+
+                {/* Visible Main TTS Button */}
+                <div className="flex justify-center">
+                  <button
+                    id="main-tts-play-btn"
+                    onClick={() => {
+                      if (isPlayingTTS && activeTTSChapterId === currentChapter.id) {
+                        onPauseTTS();
+                      } else if (activeTTSParagraphIndex !== null && activeTTSChapterId === currentChapter.id) {
+                        onResumeTTS();
+                      } else {
+                        onPlayParagraph(currentChapter.id, 0);
+                      }
+                    }}
+                    className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer shadow-md hover:scale-105 active:scale-95 transition-all duration-300 ${
+                      settings.theme === 'dark'
+                        ? 'bg-[#D4AF37] hover:bg-[#B8962D] text-[#0A0A0A] shadow-[#D4AF37]/10'
+                        : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/15'
+                    }`}
+                  >
+                    {isPlayingTTS && activeTTSChapterId === currentChapter.id ? (
+                      <>
+                        <Pause className="w-4 h-4 fill-current animate-pulse" />
+                        <span>Pausar Leitura</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-4 h-4" />
+                        <span>Ouvir Capítulo</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </motion.div>
 
               {/* Mobile Bottom Index Button */}
@@ -532,6 +565,26 @@ export default function Reader({
                 >
                   <Bookmark className="w-3.5 h-3.5" />
                   <span>Notas ({highlights.filter(h => h.bookId === book.id).length})</span>
+                </button>
+                <button
+                  id="mobile-tts-play-btn"
+                  onClick={() => {
+                    if (isPlayingTTS && activeTTSChapterId === currentChapter.id) {
+                      onPauseTTS();
+                    } else if (activeTTSParagraphIndex !== null && activeTTSChapterId === currentChapter.id) {
+                      onResumeTTS();
+                    } else {
+                      onPlayParagraph(currentChapter.id, 0);
+                    }
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold cursor-pointer ${
+                    isPlayingTTS && activeTTSChapterId === currentChapter.id
+                      ? (settings.theme === 'dark' ? 'bg-[#D4AF37] text-[#0A0A0A] border-transparent font-bold animate-pulse' : 'bg-indigo-600 text-white border-transparent animate-pulse')
+                      : (settings.theme === 'dark' ? 'border-[#333] text-[#AAA] bg-[#1A1A1A]' : 'border-slate-200 dark:border-slate-800 hover:bg-slate-100')
+                  }`}
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>{isPlayingTTS && activeTTSChapterId === currentChapter.id ? 'Pausar' : 'Ouvir'}</span>
                 </button>
               </div>
 
