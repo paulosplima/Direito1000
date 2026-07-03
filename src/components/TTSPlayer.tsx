@@ -46,17 +46,17 @@ export default function TTSPlayer({
   const ptVoices = availableVoices.filter(v => v.lang.toLowerCase().startsWith('pt'));
 
   return (
-    <div id="tts-player-bar" className="fixed bottom-0 inset-x-0 bg-slate-900 border-t border-slate-800 text-white p-4 md:px-8 z-40 shadow-2xl flex flex-col items-center">
+    <div id="tts-player-bar" className="fixed bottom-0 inset-x-0 bg-[#0F0F0F] border-t border-[#2A2A2A] text-white p-4 md:px-8 z-40 shadow-2xl flex flex-col items-center">
       <div className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4">
         
         {/* Active text snippet info */}
         <div className="flex items-center gap-3.5 w-full md:w-1/3 min-w-0">
-          <div className="p-2.5 bg-gradient-to-tr from-indigo-500 to-indigo-700 rounded-xl shadow-lg shadow-indigo-500/10 shrink-0">
+          <div className="p-2.5 bg-gradient-to-tr from-[#D4AF37] to-[#B8962D] rounded-xl shadow-lg shadow-[#D4AF37]/10 shrink-0 text-[#0A0A0A]">
             <Volume2 className={`w-5 h-5 ${isPlaying ? 'animate-bounce' : ''}`} />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-400 bg-indigo-950/60 border border-indigo-900/30 px-1.5 py-0.5 rounded-sm">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-1.5 py-0.5 rounded-sm">
                 Leitura em Voz Alta
               </span>
               <span className="text-[10px] text-slate-400 font-mono">
@@ -79,10 +79,10 @@ export default function TTSPlayer({
             id="tts-skip-back-btn"
             onClick={onPrevParagraph}
             disabled={activeParagraphIndex === 0}
-            className={`p-2.5 rounded-xl border border-slate-800 transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activeParagraphIndex === 0
-                ? 'opacity-30 cursor-not-allowed'
-                : 'bg-slate-800/40 text-slate-300 hover:bg-slate-800 hover:text-white hover:scale-105'
+                ? 'opacity-30 cursor-not-allowed border-transparent'
+                : 'border-[#2A2A2A] bg-[#1A1A1A] text-slate-300 hover:border-[#D4AF37]/40 hover:text-[#D4AF37] hover:scale-105 cursor-pointer'
             }`}
             title="Parágrafo Anterior"
           >
@@ -93,13 +93,13 @@ export default function TTSPlayer({
           <button
             id="tts-play-pause-btn"
             onClick={onPlayPause}
-            className="p-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20 hover:scale-105 active:scale-95 transition-all"
+            className="p-4 rounded-full bg-[#D4AF37] hover:bg-[#B8962D] text-[#0A0A0A] shadow-lg shadow-[#D4AF37]/15 hover:scale-105 active:scale-95 transition-all cursor-pointer font-bold"
             title={isPlaying ? "Pausar Leitura" : "Iniciar Leitura"}
           >
             {isPlaying ? (
-              <Pause className="w-5 h-5 fill-white" />
+              <Pause className="w-5 h-5 fill-current" />
             ) : (
-              <Play className="w-5 h-5 fill-white ml-0.5" />
+              <Play className="w-5 h-5 fill-current ml-0.5" />
             )}
           </button>
 
@@ -107,7 +107,7 @@ export default function TTSPlayer({
           <button
             id="tts-stop-btn"
             onClick={onStop}
-            className="p-2.5 rounded-xl border border-slate-800 bg-slate-800/40 text-rose-400 hover:bg-rose-950/40 hover:text-rose-300 transition-all hover:scale-105"
+            className="p-2.5 rounded-xl border border-[#2A2A2A] bg-[#1A1A1A] text-rose-400 hover:bg-rose-950/40 hover:text-rose-300 transition-all hover:scale-105 cursor-pointer"
             title="Parar Leitura"
           >
             <Square className="w-4 h-4 fill-rose-400/20" />
@@ -118,10 +118,10 @@ export default function TTSPlayer({
             id="tts-skip-forward-btn"
             onClick={onNextParagraph}
             disabled={activeParagraphIndex === currentChapter.paragraphs.length - 1}
-            className={`p-2.5 rounded-xl border border-slate-800 transition-all ${
+            className={`p-2.5 rounded-xl border transition-all ${
               activeParagraphIndex === currentChapter.paragraphs.length - 1
-                ? 'opacity-30 cursor-not-allowed'
-                : 'bg-slate-800/40 text-slate-300 hover:bg-slate-800 hover:text-white hover:scale-105'
+                ? 'opacity-30 cursor-not-allowed border-transparent'
+                : 'border-[#2A2A2A] bg-[#1A1A1A] text-slate-300 hover:border-[#D4AF37]/40 hover:text-[#D4AF37] hover:scale-105 cursor-pointer'
             }`}
             title="Próximo Parágrafo"
           >
@@ -132,7 +132,7 @@ export default function TTSPlayer({
         {/* Audio Quality / Voice Selection Configuration */}
         <div className="flex items-center gap-3 w-full md:w-1/3 justify-end text-xs">
           {/* Rate Selector */}
-          <div className="flex items-center gap-2 border border-slate-800 bg-slate-950/30 px-3 py-1.5 rounded-xl">
+          <div className="flex items-center gap-2 border border-[#2A2A2A] bg-[#0A0A0A] px-3 py-1.5 rounded-xl">
             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono">Velocidade:</span>
             <select
               id="tts-rate-select"
@@ -140,12 +140,12 @@ export default function TTSPlayer({
               onChange={(e) => onRateChange(parseFloat(e.target.value))}
               className="bg-transparent border-none text-xs font-bold text-slate-200 outline-hidden cursor-pointer"
             >
-              <option value="0.5" className="bg-slate-900">0.5x</option>
-              <option value="0.75" className="bg-slate-900">0.75x</option>
-              <option value="1" className="bg-slate-900">1.0x</option>
-              <option value="1.25" className="bg-slate-900">1.25x</option>
-              <option value="1.5" className="bg-slate-900">1.5x</option>
-              <option value="2" className="bg-slate-900">2.0x</option>
+              <option value="0.5" className="bg-[#1A1A1A]">0.5x</option>
+              <option value="0.75" className="bg-[#1A1A1A]">0.75x</option>
+              <option value="1" className="bg-[#1A1A1A]">1.0x</option>
+              <option value="1.25" className="bg-[#1A1A1A]">1.25x</option>
+              <option value="1.5" className="bg-[#1A1A1A]">1.5x</option>
+              <option value="2" className="bg-[#1A1A1A]">2.0x</option>
             </select>
           </div>
 
@@ -154,13 +154,13 @@ export default function TTSPlayer({
             <button
               id="tts-voice-dropdown-btn"
               onClick={() => setShowVoiceSettings(!showVoiceSettings)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 text-slate-200 hover:text-white transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#2A2A2A] bg-[#1A1A1A] hover:bg-[#222] text-slate-200 hover:text-[#D4AF37] transition-all cursor-pointer"
             >
-              <Speech className="w-4 h-4 text-indigo-400" />
+              <Speech className="w-4 h-4 text-[#D4AF37]" />
               <span className="max-w-[100px] truncate text-xs font-medium">
                 {selectedVoice ? selectedVoice.name : 'Voz Padrão'}
               </span>
-              {showVoiceSettings ? <ChevronDown className="w-3.5 h-3.5 rotate-180" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              {showVoiceSettings ? <ChevronDown className="w-3.5 h-3.5 rotate-180 text-[#D4AF37]" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
 
             {/* Voice Dropdown Panel */}
@@ -171,13 +171,13 @@ export default function TTSPlayer({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute bottom-11 right-0 p-3 bg-slate-900 border border-slate-800 rounded-2xl w-64 shadow-2xl z-50 space-y-2 text-left"
+                  className="absolute bottom-11 right-0 p-3 bg-[#0F0F0F] border border-[#2A2A2A] rounded-2xl w-64 shadow-2xl z-50 space-y-2 text-left"
                 >
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-1.5">
+                  <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-1.5 mb-1.5">
                     <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">
                       Escolher Voz (PT-BR)
                     </span>
-                    <button onClick={() => setShowVoiceSettings(false)} className="text-[10px] text-slate-400 hover:text-white underline">
+                    <button onClick={() => setShowVoiceSettings(false)} className="text-[10px] text-slate-400 hover:text-[#D4AF37] underline cursor-pointer">
                       Ok
                     </button>
                   </div>
@@ -199,14 +199,14 @@ export default function TTSPlayer({
                               onVoiceChange(voice);
                               setShowVoiceSettings(false);
                             }}
-                            className={`w-full text-left p-2 rounded-lg text-[10px] flex items-center justify-between gap-1.5 transition-colors ${
+                            className={`w-full text-left p-2 rounded-lg text-[10px] flex items-center justify-between gap-1.5 transition-colors cursor-pointer ${
                               isSelected
-                                ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 font-bold'
-                                : 'hover:bg-slate-800 text-slate-300'
+                                ? 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 font-bold'
+                                : 'hover:bg-[#1A1A1A] text-slate-300 hover:text-[#D4AF37]'
                             }`}
                           >
                             <span className="truncate">{voice.name}</span>
-                            {isSelected && <Check className="w-3 h-3 text-indigo-400 shrink-0" />}
+                            {isSelected && <Check className="w-3 h-3 text-[#D4AF37] shrink-0" />}
                           </button>
                         );
                       })
