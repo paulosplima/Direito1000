@@ -1,0 +1,6 @@
+{
+  "name": "Direito Total",
+  "description": "Plataforma de leitura jurídica com leitura em voz alta (TTS), busca avançada, marcações e carregamento de livros e textos jurídicos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
