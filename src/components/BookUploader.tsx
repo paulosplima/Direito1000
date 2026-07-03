@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Book, Chapter } from '../types';
-import { Upload, X, FileText, Plus, AlertCircle, HelpCircle } from 'lucide-react';
+import { Upload, X, FileText, Plus, AlertCircle, HelpCircle, Shield } from 'lucide-react';
 
 interface BookUploaderProps {
   onAddBook: (book: Book) => void;
@@ -8,6 +8,12 @@ interface BookUploaderProps {
 }
 
 export default function BookUploader({ onAddBook, onClose }: BookUploaderProps) {
+  // Administrator Authentication State
+  const [isAuthorized, setIsAuthorized] = useState(() => sessionStorage.getItem('direito_total_admin_auth') === 'true');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+
   const [activeTab, setActiveTab] = useState<'paste' | 'file'>('paste');
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -19,6 +25,18 @@ export default function BookUploader({ onAddBook, onClose }: BookUploaderProps) 
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError('');
+
+    if (username.trim().toLowerCase() === 'admin' && (password === 'admin' || password === 'admin123')) {
+      sessionStorage.setItem('direito_total_admin_auth', 'true');
+      setIsAuthorized(true);
+    } else {
+      setAuthError('Usuário ou senha incorretos para o perfil de Administrador.');
+    }
+  };
 
   const colors = [
     { value: 'from-blue-700 to-indigo-900', label: 'Azul Imperial' },
@@ -203,6 +221,107 @@ export default function BookUploader({ onAddBook, onClose }: BookUploaderProps) 
 
     onAddBook(newBook);
   };
+
+  if (!isAuthorized) {
+    return (
+      <div id="book-uploader-overlay" className="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+        <div id="admin-login-container" className="bg-[#0F0F0F] border border-[#2A2A2A] rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col animate-in scale-in duration-200">
+          {/* Header */}
+          <div className="p-5 border-b border-[#2A2A2A] flex items-center justify-between bg-[#0A0A0A]">
+            <div className="flex items-center gap-2">
+              <div className="p-2 bg-[#D4AF37]/10 rounded-lg text-[#D4AF37]">
+                <Shield className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-wider text-[#D4AF37] font-serif">
+                  Acesso Restrito
+                </h2>
+                <p className="text-[10px] text-slate-400 font-mono mt-0.5">
+                  Área do Administrador
+                </p>
+              </div>
+            </div>
+            <button 
+              id="close-login-btn"
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-[#1A1A1A] transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Form */}
+          <form id="admin-login-form" onSubmit={handleLoginSubmit} className="p-6 space-y-4 text-slate-200">
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Para carregar um novo livro ou texto jurídico na biblioteca, é necessário autenticar-se como **Administrador**.
+            </p>
+
+            {authError && (
+              <div id="login-error-banner" className="bg-rose-950/30 border border-rose-900/50 text-rose-300 p-3 rounded-xl text-xs flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+                <span>{authError}</span>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="admin-user" className="block text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-1.5 font-mono">
+                  Usuário de Administrador
+                </label>
+                <input
+                  id="admin-user"
+                  type="text"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="admin"
+                  className="w-full px-3.5 py-2 rounded-xl border border-[#2A2A2A] bg-[#1A1A1A] text-slate-100 placeholder-slate-600 text-xs focus:outline-hidden focus:ring-2 focus:ring-[#D4AF37]/20 focus:border-[#D4AF37] transition-all"
+                  autoFocus
+                />
+              </div>
+
+              <div>
+                <label htmlFor="admin-pass" className="block text-[10px] font-bold uppercase tracking-widest text-[#D4AF37] mb-1.5 font-mono">
+                  Senha de Acesso
+                </label>
+                <input
+                  id="admin-pass"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-3.5 py-2 rounded-xl border border-[#2A2A2A] bg-[#1A1A1A] text-slate-100 placeholder-slate-600 text-xs focus:outline-hidden focus:ring-2 focus:ring-[#D4AF37]/20 focus:border-[#D4AF37] transition-all"
+                />
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end gap-3">
+              <button
+                id="cancel-login-btn"
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-xs font-semibold rounded-xl border border-[#2A2A2A] text-slate-400 hover:bg-[#1A1A1A] hover:text-slate-200 transition-colors cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                id="submit-login-btn"
+                type="submit"
+                className="px-5 py-2 text-xs font-bold uppercase tracking-widest rounded-xl text-[#0A0A0A] bg-[#D4AF37] hover:bg-[#B8962D] transition-colors shadow-md shadow-[#D4AF37]/15 cursor-pointer animate-none"
+              >
+                Entrar
+              </button>
+            </div>
+            
+            <div className="text-[10px] text-center text-slate-600 pt-1.5 font-mono border-t border-[#2A2A2A]">
+              Credenciais de teste: <span className="text-[#D4AF37]/60">admin / admin</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div id="book-uploader-overlay" className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
